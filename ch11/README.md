@@ -1,4 +1,4 @@
-# Notes
+# Notes from Lecture Slides
 
 * ML Inference can be performed on **Cloud** or **Locally**.
     * Either on Google Cloud API or on-device.
