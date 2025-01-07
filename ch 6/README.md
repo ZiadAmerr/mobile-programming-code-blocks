@@ -37,6 +37,7 @@ FirebaseAuth.instance.userChanges().listen(
 - Right after the listener has been registered
 - When the user is signed in
 - When the user is signed out
+- When the user’s token changes
 - `reload()`, `relink()`, `updateEmail()`, `updatePassword()`, `updatePhoneNumber()`, `updateProfile()`
 
 ## Persisting Authentication State
