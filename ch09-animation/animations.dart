@@ -84,7 +84,7 @@
   )
 
 // AnimatedOpacity
-  // Implicitly an animated widget
+  // Is an ImplicitlyAnimatedWidget
   AnimatedOpacity(
     opacity: selected ? 1.0 : 0.0,  // Opacity value
 
@@ -119,3 +119,36 @@
   )
 
 // AnimatedSize
+  AnimatedSize(
+    duration: const Duration(seconds: 2),  // Animation duration
+    curve: Curves.fastOutSlowIn,  // Animation curve
+
+    child: SizedBox.square(
+      dimension: selected ? 100.0 : 50.0,  // Dimension value
+      child: const FlutterLogo(),  // Child widget
+    )
+  )
+
+// DecoratedBoxTransition
+  // Animated version of DecoratedBox
+  with SingleTickerProviderStateMixin {
+
+    // Box to build
+    DecoratedBoxTransition(
+      position: DecorationPosition.background,  // Position
+      decoration: _decorationTween.animate(_controller),  // DecorationTween animation
+      child: const FlutterLogo(size: 200),  // Child widget
+    )
+
+    // Tween
+    final DecorationTween _decorationTween = DecorationTween(
+      begin: BoxDecoration(color: Colors.blue),
+      end: BoxDecoration(color: Colors.red),
+    );
+
+    // Controller
+    late final AnimationController _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+  }
