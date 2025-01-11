@@ -34,9 +34,9 @@ Which sensor from the smartphone will you use in your design to detect the Fall 
 
 ### (b)
 Explain your approach as a developer to set the threshold value of the sensor data that will decide whether the value returned from the sensor is false positive or represents a real fall event? Justify your approach.
-- Calibrating the sensors before the fall. Then using the calibrated data to determine the offsets of the default movement. The threshold should follow an extreme change in the fall direction, which is the $z$-axis of the output. For example, setting a value of $1m/s^2$ can be a good option, but it might miss multiple events where the person is falling but the phone isn't moving as fast as $g$, so we might want to increase it to $2m/s^2$. This might introduce some False Positives, but introducing some FPs is much better instead of the person falling without the app detecting it. **NOT SURE**
-- **TLDR;** Using a high threshold such as $2m/s^2$ is good because, even though, it introduces False Positives, it minimizes False Negatives. This is relevant because FNs should be penalized more than FPs.
-- **ANOTHER CORRECT ANSWER**: Detect the history of `AccelerometerEvent` and detect if any sudden drops in the the axes. This detects the impact but requires higher compute power and very often checking of the values of `x`, `y`, and `z` attributes of the `event`.
+- Calibrating the sensors on the user's end during the fall (i.e., by allowing the user to drop the phone 3 times and calculating the offset).
+- Then, we can use the average of the 3 values as the threshold value, and then use a threshold value that is 1.5 times the average value to detect a fall event.
+- Why choose 1.5 times the average value? Because it is more important for us to detect a fall even than to miss one. So, we would rather have a false positive than a false negative.
 
 ### (c)
 You need to collect the location (Latitude and Longitude) of the user’s current location. Explain the different methods that could be used to implement this task. Which one would you choose and why?
@@ -46,3 +46,72 @@ You need to collect the location (Latitude and Longitude) of the user’s curren
 
 
 ## Question 3
+You are assigned a task to develop a weather forecast application using flutter. The application allows the user to choose a city name from a list. Once selected, the application uses REST API interface to send a request to the server to get the temperature forecast for the next 7 days. The server sends the data in JSON format. The user should be able to use the application even if they are disconnected temporarily from the internet. The user should be able to create a list of favorite cities and retrieve it back after shutting down the application.
+
+### (a)
+There are different ways to implement data persistence in flutter. Discuss these options and explain the differences between them.
+- **Shared Preferences.** Stores data in key-value pairs. It is used for storing small data that is not sensitive.
+- **Files.** Stores data in files. It is used for storing large data that is not sensitive.
+- **SQLite.** Stores data in a relational database. It is used for storing large data that is sensitive.
+- **Firestore.** Stores data in a cloud database. It is used for storing large data that is sensitive.
+
+### (b)
+Explain the advantage of using Real-Time database in Firebase. Do you think Firebase would be a valid option in this application? Why?
+- **Advantages of Real-Time Database.** NoSQL, stores as JSON, schema-less, real-time updates, offline supports, cross-platform support, scalability, and security.
+
+### (c)
+Discuss the implementation of the app database: (how many tables? the table(s) structure? UI interface(s)? queries? , etc) and explain your plans to meet the app requirements.
+-  DB implementation tables: `cities`, `favorites`
+- `cities` SQL:
+```sql
+CREATE TABLE cities (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    forecast_date DATE NOT NULL,
+    temperature REAL NOT NULL
+    condition TEXT NOT NULL
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+- `favorites` SQL:
+```sql
+CREATE TABLE favorites (
+    id INTEGER PRIMARY KEY,
+    city_id INTEGER NOT NULL,
+    FOREIGN KEY (city_id) REFERENCES cities(id)
+);
+```
+- UI Interface: 2 pages, one for selecting a city, and one for displaying the forecast.
+- Queries: 
+    - Insert weather into `cities` table: `INSERT INTO cities (name, forecast_date, temperature, condition) VALUES (?, ?, ?, ?);`
+    - Get weather for a city: `SELECT forecast_date, temperature, condition FROM cities WHERE name = ? ORDER BY forecast_date ASC;`
+    - Insert favorite city: `INSERT INTO favorites (city_id) VALUES (?);`
+    - Get favorite cities: `SELECT name, forecast_date, temperature, condition FROM cities WHERE id IN (SELECT city_id FROM favorites);`
+    ...
+- Plans:
+    - Offline support, REST API integration with weather endpoint, favorites management, UI designing, and error handling.
+
+
+## Question 4
+You are assigned a task to develop a To-do-List application using Flutter. The application has two pages. The first page contains the summary of the tasks and allows users to add/delete the task. The second page is used to edit/save the tasks.
+
+### (a)
+Draw a sketch for the UI of the first and second pages and explain all the widgets used in this application.
+- ??? Just draw something you can with widgets you know!
+
+### (b)
+Discuss your plans for testing the application. Explain the difference between Unit tests, Widget tests, and Integration tests.
+- **Unit Tests.** Tests a single function, method, or class. It is used to test the smallest unit of code
+- **Widget Tests.** Tests a single widget. It is used to test the UI of the app
+- **Integration Tests.** Tests the interaction between widgets. It is used to test the app as a whole or a large portion of it
+- **Plans for Testing.**
+    - `test` package for unit tests
+    - `flutter_test` package for widget tests
+    - `integration_test` package for integration tests
+    - `mockito` package for mocking API requests to speed up tests and lower network usage for API testing
+    - Write tests for each function, widget, and integration
+
+
+### (c)
+What are the advantages of using Continuous integration (CI) services in your test procedure?
+- Automates testing, reduces error during small changes in large codebases, ensures RCA can be done easily, ensures that the code is always in a deployable state and is always tested. Catches errors early for fixing and allows for easier accountability.
