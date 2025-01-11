@@ -37,7 +37,7 @@ Explain your approach as a developer to set the threshold value of the sensor da
 - Calibrating the sensors on the user's end during the fall (i.e., by allowing the user to drop the phone 3 times and calculating the offset).
 - Then, we can use the average of the 3 values as the threshold value, and then use a threshold value that is 1.5 times the average value to detect a fall event.
 - Why choose 1.5 times the average value? Because it is more important for us to detect a fall even than to miss one. So, we would rather have a false positive than a false negative.
-- **IMPORTANT NOTE** This is using `AccelerometerEvent`, since it is $9.8m/s^2$ when the phone is falling, we should increase the value of the threshold, but, if we are using `UserAccelerometerEvent`, which is at $0m/s^2$ when the phone is falling, we should decrease the value of the threshold.
+- **IMPORTANT NOTE** This is using `AccelerometerEvent`, since it is $0m/s^2$ when the phone is falling, we should increase the value of the threshold, but, if we are using `UserAccelerometerEvent`, which is at $9.8m/s^2$ when the phone is falling, we should decrease the value of the threshold.
 
 ### (c)
 You need to collect the location (Latitude and Longitude) of the user’s current location. Explain the different methods that could be used to implement this task. Which one would you choose and why?
