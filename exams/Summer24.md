@@ -37,7 +37,7 @@ Explain your approach as a developer to set the threshold value of the sensor da
 - Calibrating the sensors on the user's end during the fall (i.e., by allowing the user to drop the phone 3 times and calculating the offset).
 - Then, we can use the average of the 3 values as the threshold value, and then use a threshold value that is 1.5 times the average value to detect a fall event.
 - Why choose 1.5 times the average value? Because it is more important for us to detect a fall even than to miss one. So, we would rather have a false positive than a false negative.
-- **IMPORTANT NOTE** This is using `AccelerometerEvent`, since it is $0m/s^2$ when the phone is falling, we should increase the value of the threshold, but, if we are using `UserAccelerometerEvent`, which is at $9.8m/s^2$ when the phone is falling, we should decrease the value of the threshold.
+- **IMPORTANT NOTE** This is using `AccelerometerEvent`, since it is $0m/s^2$ when the phone is falling, we should increase the value of the threshold ($\sim 3m/s^2$), but, if we are using `UserAccelerometerEvent`, which is at $9.8m/s^2$ when the phone is falling, we should decrease the value of the threshold ($\sim 7m/s^2$). **FURTHER EXPLANATION OF False Positives and False Negatives is in the [Appendix](#appendix).**
 
 ### (c)
 You need to collect the location (Latitude and Longitude) of the user’s current location. Explain the different methods that could be used to implement this task. Which one would you choose and why?
@@ -116,3 +116,15 @@ Discuss your plans for testing the application. Explain the difference between U
 ### (c)
 What are the advantages of using Continuous integration (CI) services in your test procedure?
 - Automates testing, reduces error during small changes in large codebases, ensures RCA can be done easily, ensures that the code is always in a deployable state and is always tested. Catches errors early for fixing and allows for easier accountability.
+
+
+## Appendix
+Assume we have a sensor that detects falls. We have 2 types of errors:
+- **False Positive.** The sensor detects a fall when there is no fall.
+- **False Negative.** The sensor does not detect a fall when there is a fall.
+
+Which one is more dangerous? False Positive or False Negative?
+- **False Negative.** It is more dangerous because if the sensor does not detect a fall, the user might not get help when they need it. This can lead to serious injuries or even death.
+- **False Positive.** It is less dangerous because if the sensor detects a fall when there is no fall, the user might get annoyed, but they will not be harmed.
+
+So, in the case of fall detection, we would rather have a false positive than a false negative. This is why we choose a threshold value that is more sensitive to detecting falls than not detecting falls.
