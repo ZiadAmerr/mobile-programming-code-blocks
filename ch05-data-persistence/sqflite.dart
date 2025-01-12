@@ -40,7 +40,7 @@ Future<Database> openDatabaseConnection() async`{
   );
 }
 
-Future<void> insertUser(User user){
+Future<void> insertUser(User user) async{
   Database database = openDatabaseConnection();
   // insert(table_name, data_as_json, conflictAlgorithm)
   await database.insert(
